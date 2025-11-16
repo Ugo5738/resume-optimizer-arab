@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { Session, ToastMessage, JobQueueItem, OptimizationResult } from '../types';
 import Navbar from '../components/layout/Navbar';
 import Toast from '../components/ui/Toast';
@@ -36,6 +36,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
     const [jobsQueue, setJobsQueue] = useState<JobQueueItem[]>([]);
     const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
     const [toast, setToast] = useState<ToastMessage | null>(null);
+    const [appView, setAppView] = useState<'dashboard' | 'queue' | 'results'>('dashboard');
     const isDemoMode = useMemo(() => import.meta.env.VITE_DEMO_MODE === 'true', []);
     
     // State for developer preview (demo mode only)
@@ -45,6 +46,12 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
     const showToast = (message: string, type: 'success' | 'error') => {
         setToast({ message, type });
     };
+
+    useEffect(() => {
+        if (appView === 'queue' && jobsQueue.length > 0 && jobsQueue.every(job => job.status === 'complete')) {
+            setAppView('dashboard');
+        }
+    }, [appView, jobsQueue]);
 
     const handleStartOptimization = async (data: {
         resumeFile: File | null;
@@ -69,6 +76,8 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
             },
         };
         setJobsQueue(prev => [newJob, ...prev]);
+        setSelectedJobId(null);
+        setAppView('queue');
 
         // --- MOCK BACKEND PROCESSING ---
         try {
@@ -151,10 +160,21 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
             }
         }
 
+        if (appView === 'queue') {
+            return (
+                <div className="flex flex-col max-w-3xl mx-auto space-y-8">
+                    <div className="p-4 text-slate-300 bg-gray-800 rounded-lg">
+                        <p className="text-sm">Your optimization is processing. Track status below.</p>
+                    </div>
+                    <JobsQueue jobs={jobsQueue} onSelectJob={(id) => { setSelectedJobId(id); setAppView('results'); }} />
+                </div>
+            );
+        }
+
         return (
             <div className="flex flex-col max-w-3xl mx-auto space-y-8">
                 <OptimizationForm onStartOptimization={handleStartOptimization} />
-                <JobsQueue jobs={jobsQueue} onSelectJob={setSelectedJobId} />
+                <JobsQueue jobs={jobsQueue} onSelectJob={(id) => { setSelectedJobId(id); setAppView('results'); }} />
             </div>
         );
     };
@@ -162,13 +182,11 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
     // Fallback logic for actual interaction
     const selectedJob = jobsQueue.find(job => job.id === selectedJobId);
     const determineCurrentStep = (): StepId => {
-        if (selectedJob) {
-            return selectedJob.status === 'processing' ? 'processing' : 'results';
+        if (selectedJob || appView === 'results' || (isDemoMode && previewState === 'results')) {
+            return 'results';
         }
-        if (jobsQueue.some(job => job.status === 'processing')) return 'processing';
-        if (isDemoMode) {
-            if (previewState === 'results') return 'results';
-            if (previewState === 'queue') return 'processing';
+        if (appView === 'queue' || jobsQueue.some(job => job.status === 'processing') || (isDemoMode && previewState === 'queue')) {
+            return 'processing';
         }
         return 'input';
     };
@@ -185,7 +203,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
                      <StepIndicator current={currentStep} />
                      <ResultsView
                         job={selectedJob}
-                        onBack={() => setSelectedJobId(null)}
+                        onBack={() => { setSelectedJobId(null); setAppView('dashboard'); }}
                         onRefine={handleRefine}
                     />
                 </main>
