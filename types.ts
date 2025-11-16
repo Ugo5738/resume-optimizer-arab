@@ -32,4 +32,8 @@ export interface JobQueueItem {
   title: string;
   status: 'processing' | 'complete';
   result: OptimizationResult | null;
+  metadata?: {
+    company?: string;
+    contentLanguage?: 'en' | 'ar';
+  };
 }

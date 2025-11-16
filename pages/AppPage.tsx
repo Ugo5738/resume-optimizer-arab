@@ -5,6 +5,7 @@ import Toast from '../components/ui/Toast';
 import OptimizationForm from '../components/OptimizationForm';
 import JobsQueue from '../components/JobsQueue';
 import ResultsView from '../components/ResultsView';
+import { useLanguage } from '../contexts/LanguageContext';
 
 // --- MOCK DATA FOR DEMO ---
 const mockCompleteJobResult: OptimizationResult = {
@@ -33,6 +34,8 @@ type PreviewState = 'dashboard' | 'queue' | 'results';
 
 // Main Application Page
 const AppPage: React.FC<{ session: Session }> = ({ session }) => {
+    const { language } = useLanguage();
+    const isRTL = language === 'ar';
     const [jobsQueue, setJobsQueue] = useState<JobQueueItem[]>([]);
     const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
     const [toast, setToast] = useState<ToastMessage | null>(null);
@@ -50,15 +53,22 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
         resumeText: string;
         jobDescription: string;
         customInstructions: string;
+        jobTitle: string;
+        companyName: string;
+        contentLanguage: 'en' | 'ar';
     }) => {
         const jobId = `job_${Date.now()}`;
-        const jobTitle = data.jobDescription.split('\n')[0].substring(0, 50) + '...';
+        const jobTitle = data.jobTitle || data.jobDescription.split('\n')[0].substring(0, 50) + '...';
 
         const newJob: JobQueueItem = {
             id: jobId,
             title: jobTitle,
             status: 'processing',
             result: null,
+            metadata: {
+                company: data.companyName,
+                contentLanguage: data.contentLanguage,
+            },
         };
         setJobsQueue(prev => [newJob, ...prev]);
 
@@ -150,9 +160,12 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
     
     // Fallback logic for actual interaction
     const selectedJob = jobsQueue.find(job => job.id === selectedJobId);
+    const containerClasses = `min-h-screen bg-gray-900 ${isRTL ? 'text-right' : 'text-left'}`;
+    const direction = isRTL ? 'rtl' : 'ltr';
+
     if (selectedJob) {
         return (
-             <div className="min-h-screen bg-gray-900">
+             <div className={containerClasses} dir={direction}>
                 <Navbar userEmail={session.user.email} />
                 {toast && <Toast toast={toast} onClose={() => setToast(null)} />}
                 <main className="p-4 mx-auto max-w-7xl sm:p-6 lg:p-8">
@@ -167,7 +180,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-900">
+        <div className={containerClasses} dir={direction}>
             <Navbar userEmail={session.user.email} />
             {toast && <Toast toast={toast} onClose={() => setToast(null)} />}
 

@@ -1,10 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { supabase } from './services/supabase';
 import type { Session } from './types';
 import AuthPage from './pages/AuthPage';
 import AppPage from './pages/AppPage';
 import { Spinner } from './components/ui/Spinner';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 // Mock session for development/UI review
 const mockSession: Session = {
@@ -51,7 +52,11 @@ const App: React.FC = () => {
   
   // --- DEVELOPMENT ONLY: Force AppPage render ---
   // To see the AuthPage, comment out the line below and uncomment the original logic.
-  return <AppPage key={mockSession.user.id} session={mockSession} />;
+  return (
+    <LanguageProvider>
+      <AppPage key={mockSession.user.id} session={mockSession} />
+    </LanguageProvider>
+  );
 
   /* --- ORIGINAL LOGIC ---
   return (
