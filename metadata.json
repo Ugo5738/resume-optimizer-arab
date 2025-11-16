@@ -1,0 +1,5 @@
+{
+  "name": "AI Resume Optimizer",
+  "description": "Upload your resume and a job description to get an optimized version tailored to the role. Get a match score, keyword analysis, and rewritten content to land your next interview.",
+  "requestFramePermissions": []
+}
