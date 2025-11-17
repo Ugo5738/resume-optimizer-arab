@@ -9,6 +9,14 @@ interface StepTranslation {
   title: string;
 }
 
+export type RefineQuickActionId = 'moreFormal' | 'shorter' | 'moreTechnical' | 'arabicFirst';
+
+interface RefineQuickAction {
+  id: RefineQuickActionId;
+  label: string;
+  instruction: string;
+}
+
 interface TranslationStrings {
   navTitle: string;
   resumeSectionTitle: string;
@@ -51,6 +59,11 @@ interface TranslationStrings {
   resultsGenerating: string;
   resultsGeneratingSub: string;
   instructionsError: string;
+  analysisShow: string;
+  analysisHide: string;
+  refineQuickActionsTitle: string;
+  refineQuickActionsDescription: string;
+  refineQuickActions: RefineQuickAction[];
   steps: Record<StepId, StepTranslation>;
 }
 
@@ -99,6 +112,14 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
   instructionsError: 'Please provide refinement instructions.',
   analysisShow: 'View detailed match analysis',
   analysisHide: 'Hide detailed analysis',
+  refineQuickActionsTitle: 'Quick refinement suggestions',
+  refineQuickActionsDescription: 'Click a suggestion to append it to your instructions.',
+  refineQuickActions: [
+      { id: 'moreFormal', label: 'More formal tone', instruction: 'Make the resume read with a more formal and polished tone.' },
+      { id: 'shorter', label: 'Shorter', instruction: 'Tighten the summary and bullet points so the content is more concise.' },
+      { id: 'moreTechnical', label: 'More technical', instruction: 'Add technical depth and highlight specific tools, frameworks, or metrics.' },
+      { id: 'arabicFirst', label: 'Arabic-first CV', instruction: 'Prioritize Arabic headings and ensure the Arabic content appears first.' },
+    ],
   steps: {
       input: { label: 'Step 1', title: 'Input Details' },
       processing: { label: 'Step 2', title: 'Processing' },
@@ -150,6 +171,14 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
   instructionsError: 'يرجى إدخال تعليمات التحسين.',
   analysisShow: 'عرض تحليل التوافق التفصيلي',
   analysisHide: 'إخفاء التحليل التفصيلي',
+  refineQuickActionsTitle: 'اقتراحات سريعة',
+  refineQuickActionsDescription: 'انقر على أي اقتراح لإضافته إلى التعليمات.',
+  refineQuickActions: [
+      { id: 'moreFormal', label: 'صيغة أكثر رسمية', instruction: 'اجعل النبرة أكثر رسمية ومهنية في جميع الأقسام.' },
+      { id: 'shorter', label: 'اختصر المحتوى', instruction: 'قلّل طول الملخص والنقاط مع الحفاظ على أهم النتائج.' },
+      { id: 'moreTechnical', label: 'تفاصيل تقنية أكثر', instruction: 'أضف تفاصيل تقنية إضافية واذكر الأدوات والأطر المرتبطة بالدور.' },
+      { id: 'arabicFirst', label: 'سيرة عربية أولاً', instruction: 'قدّم المحتوى العربي أولاً وتأكد من أن العناوين الأساسية باللغة العربية.' },
+    ],
   steps: {
       input: { label: 'الخطوة ١', title: 'إدخال البيانات' },
       processing: { label: 'الخطوة ٢', title: 'جاري المعالجة' },

@@ -3,12 +3,14 @@
 This file defines a **sequenced, implementation‑ready task list** for AI agents working on this repository.
 
 Conventions for agents:
+
 - Work on **one task at a time**.
 - Do **not** change scope of a task; if something is missing, add a new task instead of expanding an existing one.
 - Always read the **“Dependencies”** section before starting a task.
 - When a task is finished, update its status marker from `[ ]` to `[x]` and briefly summarize changes under **“Completion Notes”**.
 
 Status markers:
+
 - `[ ]` = not started
 - `[~]` = in progress
 - `[x]` = completed
@@ -18,6 +20,7 @@ Status markers:
 ## Phase 1 – Core Arabic Support & UX Structure
 
 ### Task 1 – Global Language Toggle & Context
+
 - **ID:** T1
 - **Status:** [x]
 - **Priority:** High
@@ -40,6 +43,7 @@ Status markers:
 ---
 
 ### Task 2 – Navbar Language Switch UI
+
 - **ID:** T2
 - **Status:** [x]
 - **Priority:** High
@@ -58,6 +62,7 @@ Status markers:
 ---
 
 ### Task 3 – RTL Layout & Direction Handling
+
 - **ID:** T3
 - **Status:** [x]
 - **Priority:** High
@@ -78,6 +83,7 @@ Status markers:
 ---
 
 ### Task 4 – Localized UI Copy & Placeholders (EN/AR)
+
 - **ID:** T4
 - **Status:** [x]
 - **Priority:** High
@@ -102,6 +108,7 @@ Status markers:
 ---
 
 ### Task 5 – Per‑Resume Content Language Selector
+
 - **ID:** T5
 - **Status:** [x]
 - **Priority:** High
@@ -124,6 +131,7 @@ Status markers:
 ---
 
 ### Task 6 – Stepper / Journey Indicator
+
 - **ID:** T6
 - **Status:** [x]
 - **Priority:** High
@@ -147,6 +155,7 @@ Status markers:
 ## Phase 2 – Queue Behavior & Demo/Production Separation
 
 ### Task 7 – Replace DevPreviewControls with Real Flow
+
 - **ID:** T7
 - **Status:** [x]
 - **Priority:** High
@@ -169,6 +178,7 @@ Status markers:
 ---
 
 ### Task 8 – Production-Ready Job State & Navigation
+
 - **ID:** T8
 - **Status:** [x]
 - **Priority:** High
@@ -189,6 +199,7 @@ Status markers:
 ---
 
 ### Task 9 – Extract Presentational Components for Job Row & Results Layout
+
 - **ID:** T9
 - **Status:** [x]
 - **Priority:** Medium
@@ -211,6 +222,7 @@ Status markers:
 ## Phase 3 – UI & Accessibility Enhancements
 
 ### Task 10 – Dashboard & Results Visual Hierarchy
+
 - **ID:** T10
 - **Status:** [x]
 - **Priority:** Medium
@@ -229,6 +241,7 @@ Status markers:
 ---
 
 ### Task 11 – Collapsible Detailed Analysis Panel
+
 - **ID:** T11
 - **Status:** [x]
 - **Priority:** Medium
@@ -249,6 +262,7 @@ Status markers:
 ---
 
 ### Task 12 – Mobile Responsiveness Improvements
+
 - **ID:** T12
 - **Status:** [x]
 - **Priority:** Medium
@@ -269,8 +283,9 @@ Status markers:
 ---
 
 ### Task 13 – Accessibility & Focus States
+
 - **ID:** T13
-- **Status:** [ ]
+- **Status:** [x]
 - **Priority:** Medium
 - **Goal:** Improve keyboard navigation and color contrast, especially in dark mode.
 - **Details:**
@@ -287,30 +302,32 @@ Status markers:
 ---
 
 ### Task 14 – Refinement UX Quick Actions
+
 - **ID:** T14
-- **Status:** [ ]
+- **Status:** [x]
 - **Priority:** Low
-- **Goal:** Make it easier for users to refine results by adding quick‑action chips that prefill refinement instructions.
+- **Goal:** Make it easier for users to refine results by adding quick-action chips that prefill refinement instructions.
 - **Details:**
   - In `components/ResultsView.tsx` (refinement form):
     - Add a small set of clickable chips (buttons) above the textarea:
-      - Examples: “More formal”, “Shorter”, “More technical”, “Arabic‑first CV”.
+      - Examples: “More formal”, “Shorter”, “More technical”, “Arabic-first CV”.
     - When a chip is clicked:
       - Either append a phrase to the textarea or replace its content (decide and document).
   - Localize chip labels via the translation system (`translations.ts`).
 - **Affected files:** `components/ResultsView.tsx`, `translations.ts`.
 - **Dependencies:** T4.
-- **Completion Notes:** (to be filled by agent)
+- **Completion Notes:** Added localized quick-action chips that append preset refinement instructions to the textarea when clicked, with helper text describing the behavior.
 
 ---
 
 ## Phase 4 – Backend & Architecture
 
 ### Task 15 – Config & Environment Management
+
 - **ID:** T15
-- **Status:** [ ]
+- **Status:** [x]
 - **Priority:** Low
-- **Goal:** Move hard‑coded API URLs and Supabase configuration into environment‑based configuration suitable for production.
+- **Goal:** Move hard-coded API URLs and Supabase configuration into environment-based configuration suitable for production.
 - **Details:**
   - In `config.ts`:
     - Replace hard‑coded `API_BASE_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY` with values from Vite env (`import.meta.env.VITE_*`).
@@ -318,11 +335,12 @@ Status markers:
   - Confirm `services/supabase.ts` imports updated constants and logs helpful errors when missing.
 - **Affected files:** `config.ts`, `services/supabase.ts`.
 - **Dependencies:** None.
-- **Completion Notes:** (to be filled by agent)
+- **Completion Notes:** Config now pulls API/Supabase values from `import.meta.env` with localhost fallbacks, and the Supabase client logs a clear error when env vars are missing.
 
 ---
 
 ### Task 16 – Backend Job Model & API Contracts (Design Only in Frontend Repo)
+
 - **ID:** T16
 - **Status:** [ ]
 - **Priority:** High
@@ -344,6 +362,7 @@ Status markers:
 ---
 
 ### Task 17 – Frontend Integration with Job API (Stubbed)
+
 - **ID:** T17
 - **Status:** [ ]
 - **Priority:** High
@@ -363,6 +382,7 @@ Status markers:
 ---
 
 ### Task 18 – Arabic/English Processing Metadata (Frontend Integration)
+
 - **ID:** T18
 - **Status:** [ ]
 - **Priority:** Medium
@@ -380,6 +400,7 @@ Status markers:
 ---
 
 ### Task 19 – Frontend Error Handling & Edge Cases
+
 - **ID:** T19
 - **Status:** [ ]
 - **Priority:** Medium
@@ -402,6 +423,7 @@ Status markers:
 ## Phase 5 – Product Polish & Future Work
 
 ### Task 20 – Clarify Value Proposition for Arab Users (Copy & Structure)
+
 - **ID:** T20
 - **Status:** [ ]
 - **Priority:** Medium
@@ -422,6 +444,7 @@ Status markers:
 End of TODO list. Agents should append any new tasks below this line with a new incremental ID (T21, T22, …) and keep the same structure.
 
 ### Task 21 – Language-Aware Typography
+
 - **ID:** T21
 - **Status:** [x]
 - **Priority:** Medium

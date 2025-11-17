@@ -1,6 +1,35 @@
-// NOTE: Replace these with your actual backend and Supabase project details.
-// These are placeholder values to allow the app to run without crashing,
-// as the development environment does not support import.meta.env.
-export const API_BASE_URL: string = 'https://api.smartresume.example.com';
-export const SUPABASE_URL: string = 'https://your-project-id.supabase.co';
-export const SUPABASE_ANON_KEY: string = 'your-supabase-anon-key';
+const DEFAULT_API_BASE_URL = 'http://localhost:8787';
+const DEFAULT_SUPABASE_URL = 'http://localhost:54321';
+const DEFAULT_SUPABASE_ANON_KEY = 'local-development-anon-key';
+
+/**
+ * Helper that reads from Vite env and falls back to safe local placeholders.
+ * This keeps production secrets in .env files while allowing the UI to run locally.
+ */
+const withFallback = (value: string | undefined, fallback: string) => {
+  if (value && value.trim().length > 0) {
+    return value;
+  }
+  return fallback;
+};
+
+const rawApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+const rawSupabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
+const rawSupabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
+
+export const API_BASE_URL: string = withFallback(
+  rawApiBaseUrl,
+  DEFAULT_API_BASE_URL
+);
+
+export const SUPABASE_URL: string = withFallback(
+  rawSupabaseUrl,
+  DEFAULT_SUPABASE_URL
+);
+
+export const SUPABASE_ANON_KEY: string = withFallback(
+  rawSupabaseAnonKey,
+  DEFAULT_SUPABASE_ANON_KEY
+);
+
+export const SUPABASE_CONFIGURED = Boolean(rawSupabaseUrl && rawSupabaseAnonKey);

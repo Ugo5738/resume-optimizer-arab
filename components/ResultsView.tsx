@@ -20,6 +20,18 @@ const ResultsView: React.FC<{
     const [error, setError] = useState<string | null>(null);
     const [showAnalysis, setShowAnalysis] = useState(false);
 
+    const handleQuickActionSelect = (instruction: string) => {
+        setRefineInstructions(prev => {
+            if (!prev.trim()) {
+                return instruction;
+            }
+
+            const needsSeparator = !prev.endsWith('\n');
+            return `${prev}${needsSeparator ? '\n' : ''}${instruction}`;
+        });
+        setError(null);
+    };
+
     const handleRefineSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!refineInstructions.trim()) {
@@ -52,6 +64,26 @@ const ResultsView: React.FC<{
                         <p className="text-sm text-slate-400">
                             {t.refineDescription}
                         </p>
+                        {t.refineQuickActions.length > 0 && (
+                            <div className="space-y-2">
+                                <div>
+                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-300">{t.refineQuickActionsTitle}</p>
+                                    <p className="text-xs text-slate-400">{t.refineQuickActionsDescription}</p>
+                                </div>
+                                <div className={`flex flex-wrap gap-2 ${isRTL ? 'justify-end' : ''}`}>
+                                    {t.refineQuickActions.map(action => (
+                                        <button
+                                            key={action.id}
+                                            type="button"
+                                            className="px-3 py-1.5 text-xs font-medium rounded-full border border-gray-600 text-slate-200 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
+                                            onClick={() => handleQuickActionSelect(action.instruction)}
+                                        >
+                                            {action.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         <textarea
                             value={refineInstructions}
                             onChange={e => { setRefineInstructions(e.target.value); setError(null); }}
