@@ -78,7 +78,18 @@ const ResultsView: React.FC<{
                 {/* Right Panel - Results Document */}
                 <div className="md:col-span-3 p-8 bg-white rounded-lg shadow-lg">
                     {job.result ? (
-                        <ResumePreviewPanel result={job.result} isRTL={isRTL} t={t} />
+                        <div className="space-y-6">
+                            <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                <div>
+                                    <p className="text-sm font-medium text-slate-600">{t.steps.results.label}</p>
+                                    <h3 className="text-2xl font-semibold text-slate-900">{t.steps.results.title}</h3>
+                                </div>
+                                <div className="px-4 py-2 bg-primary-50 rounded-lg text-primary-700 font-semibold">
+                                    {t.matchScoreLabel}: {job.result.score}%
+                                </div>
+                            </div>
+                            <ResumePreviewPanel result={job.result} isRTL={isRTL} t={t} />
+                        </div>
                     ) : (
                          <div className="py-24 text-center text-slate-500">
                              <p className="font-semibold">{t.resultsGenerating}</p>

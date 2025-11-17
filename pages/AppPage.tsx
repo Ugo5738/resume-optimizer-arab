@@ -162,9 +162,12 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
 
         if (appView === 'queue') {
             return (
-                <div className="flex flex-col max-w-3xl mx-auto space-y-8">
-                    <div className="p-4 text-slate-300 bg-gray-800 rounded-lg">
-                        <p className="text-sm">Your optimization is processing. Track status below.</p>
+                <div className="flex flex-col max-w-4xl mx-auto space-y-6">
+                    <div className="p-4 sm:p-6 bg-gray-800 rounded-2xl shadow-lg border border-gray-700">
+                        <p className="text-base font-medium text-slate-100">Your optimization is processing</p>
+                        <p className="text-sm text-slate-400 mt-1">
+                            We’re tailoring your resume to match the job description. You can follow the status below and open the result once it’s ready.
+                        </p>
                     </div>
                     <JobsQueue jobs={jobsQueue} onSelectJob={(id) => { setSelectedJobId(id); setAppView('results'); }} />
                 </div>
@@ -172,9 +175,19 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
         }
 
         return (
-            <div className="flex flex-col max-w-3xl mx-auto space-y-8">
-                <OptimizationForm onStartOptimization={handleStartOptimization} />
-                <JobsQueue jobs={jobsQueue} onSelectJob={(id) => { setSelectedJobId(id); setAppView('results'); }} />
+            <div className="grid gap-8 max-w-5xl mx-auto lg:grid-cols-[2fr,1fr]">
+                <div className="order-2 lg:order-1">
+                    <OptimizationForm onStartOptimization={handleStartOptimization} />
+                </div>
+                <div className="order-1 lg:order-2">
+                    <div className="sticky top-8">
+                        <div className="mb-4 p-4 bg-gray-800 border border-gray-700 rounded-xl">
+                            <p className="text-sm text-slate-300">Recent optimizations</p>
+                            <p className="text-xs text-slate-400">Completed jobs appear here so you can quickly reopen results.</p>
+                        </div>
+                        <JobsQueue jobs={jobsQueue} onSelectJob={(id) => { setSelectedJobId(id); setAppView('results'); }} />
+                    </div>
+                </div>
             </div>
         );
     };
