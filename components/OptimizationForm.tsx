@@ -138,7 +138,7 @@ const OptimizationForm: React.FC<OptimizationFormProps> = ({ onStartOptimization
                         onChange={e => { setResumeText(e.target.value); setResumeFile(null); setError(null); }}
                         rows={8}
                         placeholder={t.resumePlaceholder}
-                        className={getTextareaClasses(contentLanguage)}
+                        className={`${getTextareaClasses(contentLanguage)} min-h-[180px] sm:min-h-[220px]`}
                     />
                 </div>
 
@@ -151,7 +151,7 @@ const OptimizationForm: React.FC<OptimizationFormProps> = ({ onStartOptimization
                         onChange={e => { setJobDescription(e.target.value); setError(null); }}
                         rows={10}
                         placeholder={t.jobDescriptionPlaceholder}
-                        className={getTextareaClasses(contentLanguage)}
+                        className={`${getTextareaClasses(contentLanguage)} min-h-[200px] sm:min-h-[260px]`}
                         required
                     />
                 </div>
@@ -165,7 +165,7 @@ const OptimizationForm: React.FC<OptimizationFormProps> = ({ onStartOptimization
                         onChange={e => setCustomInstructions(e.target.value)}
                         rows={4}
                         placeholder={t.customPlaceholder}
-                        className={getTextareaClasses(contentLanguage)}
+                        className={`${getTextareaClasses(contentLanguage)} min-h-[120px]`}
                     />
                 </div>
 
