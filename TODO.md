@@ -425,7 +425,7 @@ Status markers:
 ### Task 20 – Clarify Value Proposition for Arab Users (Copy & Structure)
 
 - **ID:** T20
-- **Status:** [ ]
+- **Status:** [x]
 - **Priority:** Medium
 - **Goal:** Reflect the unique value for Arabic‑speaking users directly in the product copy and structure.
 - **Details:**
@@ -437,7 +437,7 @@ Status markers:
   - Ensure both English and Arabic copy feel native and consistent with the translation system.
 - **Affected files:** `components/layout/Navbar.tsx`, any hero/intro sections in `pages/AppPage.tsx`, `translations.ts`.
 - **Dependencies:** T4, T3.
-- **Completion Notes:** (to be filled by agent)
+- **Completion Notes:** Added bilingual hero/intro messaging, navbar tagline, and language guidance copy so users immediately see the Arabic/English ATS value.
 
 ---
 

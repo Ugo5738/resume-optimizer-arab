@@ -16,6 +16,7 @@ import ResultsView from '../components/ResultsView';
 import StepIndicator from '../components/StepIndicator';
 import { useLanguage } from '../contexts/LanguageContext';
 import type { StepId } from '../translations';
+import { useTranslations } from '../translations';
 import { jobsService } from '../services/jobs';
 
 // --- MOCK DATA FOR DEMO ---
@@ -84,6 +85,7 @@ const deriveJobTitle = (jobTitle: string, jobDescription: string) => {
 // Main Application Page
 const AppPage: React.FC<{ session: Session }> = ({ session }) => {
     const { language } = useLanguage();
+    const t = useTranslations();
     const isRTL = language === 'ar';
     const [jobsQueue, setJobsQueue] = useState<JobQueueItem[]>([]);
     const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
@@ -387,6 +389,34 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
 
             <main className="p-4 mx-auto max-w-7xl sm:p-6 lg:p-8">
                 <StepIndicator current={currentStep} />
+                {!selectedJob && (
+                    <section className="mb-8 rounded-2xl border border-gray-700 bg-gradient-to-br from-gray-800 to-gray-900 p-6 shadow-lg">
+                        <div className={`${isRTL ? 'text-right' : 'text-left'}`}>
+                            <span className="inline-flex items-center px-3 py-1 text-xs font-semibold tracking-wide uppercase rounded-full bg-primary-500/10 text-primary-300">
+                                {t.navSubtitle}
+                            </span>
+                            <h1 className="mt-4 text-2xl font-semibold text-slate-100 sm:text-3xl">
+                                {t.heroTitle}
+                            </h1>
+                            <p className="mt-2 text-sm text-slate-300 sm:text-base">
+                                {t.heroSubtitle}
+                            </p>
+                        </div>
+                        <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                            {t.heroHighlights.map((highlight, index) => (
+                                <div
+                                    key={`${highlight}-${index}`}
+                                    className={`flex items-start space-x-2 rounded-xl bg-gray-900/40 p-3 text-sm text-slate-200 border border-gray-800 ${isRTL ? 'flex-row-reverse space-x-reverse text-right' : ''}`}
+                                >
+                                    <span className="text-primary-400" aria-hidden="true">
+                                        ✓
+                                    </span>
+                                    <span>{highlight}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
                 <DevPreviewControls />
                 {renderContent()}
             </main>

@@ -150,6 +150,10 @@ const OptimizationForm: React.FC<OptimizationFormProps> = ({ onStartOptimization
                             </div>
                         ))}
                     </div>
+                    <div className="rounded-lg bg-gray-900/40 border border-gray-700 p-3 text-xs text-slate-400">
+                        <p className="font-semibold text-slate-200">{t.languageHelperTitle}</p>
+                        <p className="mt-1">{t.languageHelperBody}</p>
+                    </div>
                 </div>
 
                 {/* --- Job Meta --- */}

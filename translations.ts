@@ -19,6 +19,7 @@ interface RefineQuickAction {
 
 interface TranslationStrings {
   navTitle: string;
+  navSubtitle: string;
   resumeSectionTitle: string;
   resumeSectionDescription: string;
   uploadLabel: string;
@@ -66,6 +67,11 @@ interface TranslationStrings {
   errorFileTooLarge: string;
   analysisShow: string;
   analysisHide: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  heroHighlights: string[];
+  languageHelperTitle: string;
+  languageHelperBody: string;
   refineQuickActionsTitle: string;
   refineQuickActionsDescription: string;
   refineQuickActions: RefineQuickAction[];
@@ -75,6 +81,7 @@ interface TranslationStrings {
 const translations: Record<SupportedLanguage, TranslationStrings> = {
   en: {
     navTitle: 'AI Resume Optimizer',
+    navSubtitle: 'Bilingual, ATS-friendly CV tailoring',
     resumeSectionTitle: '1. Your Resume',
     resumeSectionDescription: 'Upload a PDF/DOCX or paste your resume text below.',
     uploadLabel: 'Click to upload a file',
@@ -118,10 +125,19 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
     copyMarkdown: 'Copy Markdown',
   copied: 'Copied!',
   resultsGenerating: 'Your results are being generated...',
-  resultsGeneratingSub: 'This may take a moment.',
-  instructionsError: 'Please provide refinement instructions.',
-  analysisShow: 'View detailed match analysis',
-  analysisHide: 'Hide detailed analysis',
+    resultsGeneratingSub: 'This may take a moment.',
+    instructionsError: 'Please provide refinement instructions.',
+    analysisShow: 'View detailed match analysis',
+    analysisHide: 'Hide detailed analysis',
+    heroTitle: 'Own every interview—Arabic or English',
+    heroSubtitle: 'Generate ATS-friendly Arabic resumes and polished English versions from one workflow.',
+    heroHighlights: [
+      'Surface Arabic-first sections while keeping English accomplishments aligned.',
+      'Preserves RTL layout conventions that pass corporate ATS filters.',
+      'Guides bilingual storytelling so global recruiters understand your regional impact.',
+    ],
+    languageHelperTitle: 'Language tip',
+    languageHelperBody: 'Select the languages that reflect your source materials and the market you are targeting. We automatically adapt formatting for Arabic RTL sections and highlight English summaries when needed.',
   refineQuickActionsTitle: 'Quick refinement suggestions',
   refineQuickActionsDescription: 'Click a suggestion to append it to your instructions.',
   refineQuickActions: [
@@ -139,6 +155,7 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
   },
   ar: {
     navTitle: 'منسق السيرة الذاتية بالذكاء الاصطناعي',
+    navSubtitle: 'تحسينات ثنائية اللغة ومتوافقة مع أنظمة التتبع',
     resumeSectionTitle: '١. سيرتك الذاتية',
     resumeSectionDescription: 'قم بتحميل ملف PDF/DOCX أو الصق نص سيرتك الذاتية بالأسفل.',
     uploadLabel: 'انقر لرفع ملف',
@@ -182,10 +199,19 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
     copyMarkdown: 'نسخ Markdown',
   copied: 'تم النسخ!',
   resultsGenerating: 'يتم الآن إنشاء النتائج...',
-  resultsGeneratingSub: 'قد يستغرق ذلك لحظات.',
-  instructionsError: 'يرجى إدخال تعليمات التحسين.',
-  analysisShow: 'عرض تحليل التوافق التفصيلي',
-  analysisHide: 'إخفاء التحليل التفصيلي',
+    resultsGeneratingSub: 'قد يستغرق ذلك لحظات.',
+    instructionsError: 'يرجى إدخال تعليمات التحسين.',
+    analysisShow: 'عرض تحليل التوافق التفصيلي',
+    analysisHide: 'إخفاء التحليل التفصيلي',
+    heroTitle: 'تميّز في أسواق العمل العربية والإنجليزية',
+    heroSubtitle: 'أنشئ سير ذاتية عربية متوافقة مع أنظمة التتبع ونسخًا إنجليزية مصقولة من مكان واحد.',
+    heroHighlights: [
+      'أبرز الأقسام العربية أولاً مع الحفاظ على إنجازاتك الإنجليزية في السياق الصحيح.',
+      'يحافظ على قواعد الكتابة من اليمين لليسار بطريقة تقرؤها أنظمة التتبع المؤسسية.',
+      'يركّز على سرد ثنائي اللغة يشرح تأثيرك المحلي للمُجنّدين الدوليين.',
+    ],
+    languageHelperTitle: 'ملاحظة حول اللغة',
+    languageHelperBody: 'اختر اللغات التي تعكس سيرتك الأصلية والسوق المستهدف. سنضبط الاتجاه تلقائيًا للنصوص العربية ونُبرز الملخصات الإنجليزية عند الحاجة.',
   refineQuickActionsTitle: 'اقتراحات سريعة',
   refineQuickActionsDescription: 'انقر على أي اقتراح لإضافته إلى التعليمات.',
   refineQuickActions: [
