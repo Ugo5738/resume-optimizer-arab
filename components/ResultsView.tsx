@@ -125,7 +125,14 @@ const ResultsView: React.FC<{
                             </div>
                             {showAnalysis && (
                                 <div className="p-4 border border-slate-200 rounded-lg bg-slate-50">
-                                    <ResultsSummaryPanel result={job.result} isRTL={isRTL} t={t} />
+                                    <ResultsSummaryPanel
+                                        result={job.result}
+                                        isRTL={isRTL}
+                                        t={t}
+                                        desiredOutputLang={job.metadata?.desiredOutputLang}
+                                        resumeLang={job.metadata?.resumeLang}
+                                        jobDescriptionLang={job.metadata?.jobDescriptionLang}
+                                    />
                                 </div>
                             )}
                             <ResumePreviewPanel result={job.result} isRTL={isRTL} t={t} />

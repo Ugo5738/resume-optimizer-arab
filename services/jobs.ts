@@ -81,6 +81,73 @@ const mockResultTemplate: OptimizationResult = {
     'Added a dedicated technical skills section for better keyword matching.',
     'Rephrased responsibilities to use more active language.',
   ],
+  extractedEntities: {
+    skills: ['Frontend Architecture', 'Design Systems', 'Mentorship', 'UI/UX Collaboration'],
+    tools: ['React', 'TypeScript', 'Storybook', 'Figma', 'Node.js', 'CI/CD'],
+    education: ['B.Sc. Computer Science — King Saud University (2015)'],
+    experience: [
+      {
+        role: 'Lead Frontend Engineer',
+        company: 'TechSolutions Inc.',
+        duration: '2020–Present',
+        highlights: [
+          'Architected a component-based design system across 5 squads.',
+          'Mentored 4 engineers and improved delivery velocity by 25%.',
+        ],
+      },
+    ],
+  },
+  alignmentInsights: {
+    matched: ['React', 'TypeScript', 'Design Systems'],
+    missing: ['AWS', 'Accessibility testing'],
+    weak: ['CI/CD depth'],
+    evidence: [
+      {
+        source: 'resume',
+        snippet: 'Led the architecture and development of a new component-based design system in React and Storybook.',
+        score: 0.82,
+      },
+      {
+        source: 'job',
+        snippet: 'Role requires ownership of CI/CD and observability practices.',
+        score: 0.71,
+        note: 'Add pipeline and monitoring examples.',
+      },
+    ],
+  },
+  reliability: {
+    invalidJsonRatePct: 1.2,
+    lastRunValid: true,
+    latencySeconds: 14,
+    avgLatencySeconds: 12,
+  },
+  evaluation: {
+    extractionAccuracy: 92,
+    matchingPrecision: 88,
+    retrievalRelevance: 90,
+    feedbackQuality: 86,
+  },
+  retrievalContexts: [
+    {
+      source: 'resume',
+      snippet: 'Component-based design system in React and Storybook improved developer efficiency by 40%.',
+      score: 0.83,
+    },
+    {
+      source: 'job',
+      snippet: 'Looking for leaders who can mentor teams and drive UI/UX best practices with metrics.',
+      score: 0.8,
+    },
+    {
+      source: 'retrieval',
+      snippet: 'CI/CD ownership and observability are required to stabilize releases.',
+      score: 0.76,
+    },
+  ],
+  translationNotes: [
+    'Localized summary into Arabic while preserving English keywords for ATS parsing.',
+    'Applied RTL-safe spacing for Arabic headings and ensured bilingual section ordering.',
+  ],
   previewMarkdown: `# Your Name
 
 ## Summary
@@ -104,25 +171,48 @@ Results-driven Senior Frontend Engineer with over 8 years of experience building
   detectedJobDescLang: 'en',
 };
 
-const cloneResult = (overrides?: Partial<OptimizationResult>): OptimizationResult => ({
-  ...mockResultTemplate,
-  id: `opt_${Date.now()}`,
-  changeLog: [...mockResultTemplate.changeLog],
-  missingKeywords: [...mockResultTemplate.missingKeywords],
-  coveredKeywords: [...mockResultTemplate.coveredKeywords],
-  ...(overrides ?? {}),
+const deepCloneResult = (result: OptimizationResult): OptimizationResult => ({
+  ...result,
+  changeLog: [...result.changeLog],
+  missingKeywords: [...result.missingKeywords],
+  coveredKeywords: [...result.coveredKeywords],
+  extractedEntities: result.extractedEntities
+    ? {
+      ...result.extractedEntities,
+      skills: [...result.extractedEntities.skills],
+      tools: [...result.extractedEntities.tools],
+      education: [...result.extractedEntities.education],
+      experience: result.extractedEntities.experience.map(entry => ({
+        ...entry,
+        highlights: entry.highlights ? [...entry.highlights] : undefined,
+      })),
+    }
+    : undefined,
+  alignmentInsights: result.alignmentInsights
+    ? {
+      ...result.alignmentInsights,
+      matched: [...result.alignmentInsights.matched],
+      missing: [...result.alignmentInsights.missing],
+      weak: [...result.alignmentInsights.weak],
+      evidence: result.alignmentInsights.evidence?.map(item => ({ ...item })),
+    }
+    : undefined,
+  reliability: result.reliability ? { ...result.reliability } : undefined,
+  evaluation: result.evaluation ? { ...result.evaluation } : undefined,
+  retrievalContexts: result.retrievalContexts?.map(ctx => ({ ...ctx })),
+  translationNotes: result.translationNotes ? [...result.translationNotes] : undefined,
 });
+
+const cloneResult = (overrides?: Partial<OptimizationResult>): OptimizationResult =>
+  deepCloneResult({
+    ...mockResultTemplate,
+    id: `opt_${Date.now()}`,
+    ...(overrides ?? {}),
+  });
 
 const cloneJobRecord = (job: JobRecord): JobRecord => ({
   ...job,
-  result: job.result
-    ? {
-        ...job.result,
-        changeLog: [...job.result.changeLog],
-        coveredKeywords: [...job.result.coveredKeywords],
-        missingKeywords: [...job.result.missingKeywords],
-      }
-    : null,
+  result: job.result ? deepCloneResult(job.result) : null,
 });
 
 const normalizeTitle = (payload: CreateJobPayload) => {
@@ -133,7 +223,7 @@ const normalizeTitle = (payload: CreateJobPayload) => {
     .split('\n')
     .map(line => line.trim())
     .find(Boolean);
-  return fallback ? `${fallback.slice(0, 80)}${fallback.length > 80 ? '…' : ''}` : 'Optimization Job';
+  return fallback ? `${fallback.slice(0, 80)}${fallback.length > 80 ? '…' : ''}` : 'Analysis Job';
 };
 
 const toJobSummary = (job: JobRecord): JobSummary => ({
@@ -153,7 +243,7 @@ const scheduleMockCompletion = (jobId: string, instructions?: string, delayMs = 
   if (mockJobTimers[jobId]) {
     clearTimeout(mockJobTimers[jobId]);
   }
-  mockJobTimers[jobId] = setTimeout(() => {
+  mockJobTimers[jobId] = window.setTimeout(() => {
     const jobIndex = mockJobs.findIndex(job => job.id === jobId);
     if (jobIndex === -1) {
       return;
@@ -162,8 +252,8 @@ const scheduleMockCompletion = (jobId: string, instructions?: string, delayMs = 
     const updatedResult = cloneResult(
       instructions
         ? {
-            changeLog: [`Applied refinement: ${instructions}`, ...mockResultTemplate.changeLog],
-          }
+          changeLog: [`Applied refinement: ${instructions}`, ...mockResultTemplate.changeLog],
+        }
         : undefined
     );
     mockJobs[jobIndex] = {

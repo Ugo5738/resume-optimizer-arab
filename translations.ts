@@ -67,6 +67,36 @@ interface TranslationStrings {
   errorFileTooLarge: string;
   analysisShow: string;
   analysisHide: string;
+  structuredExtractionTitle: string;
+  structuredExtractionSubtitle: string;
+  groundedFeedbackTitle: string;
+  matchedLabel: string;
+  missingLabel: string;
+  weakLabel: string;
+  evidenceLabel: string;
+  retrievalContextTitle: string;
+  reliabilityTitle: string;
+  invalidJsonRateLabel: string;
+  latencyLabel: string;
+  avgLatencyLabel: string;
+  lastRunValidLabel: string;
+  reliabilityTargets: string;
+  evaluationTitle: string;
+  translationTitle: string;
+  translationNotesLabel: string;
+  outputLanguageLabel: string;
+  detectedResumeLabel: string;
+  detectedJobLabel: string;
+  skillsLabel: string;
+  toolsLabel: string;
+  educationLabel: string;
+  experienceLabel: string;
+  extractionAccuracyLabel: string;
+  matchingPrecisionLabel: string;
+  retrievalRelevanceLabel: string;
+  feedbackQualityLabel: string;
+  statusValid: string;
+  statusInvalid: string;
   heroTitle: string;
   heroSubtitle: string;
   heroHighlights: string[];
@@ -80,8 +110,8 @@ interface TranslationStrings {
 
 const translations: Record<SupportedLanguage, TranslationStrings> = {
   en: {
-    navTitle: 'AI Resume Optimizer',
-    navSubtitle: 'Bilingual, ATS-friendly CV tailoring',
+    navTitle: 'AI Resume Analyzer',
+    navSubtitle: 'Bilingual, ATS-friendly CV analysis',
     resumeSectionTitle: '1. Your Resume',
     resumeSectionDescription: 'Upload a PDF/DOCX or paste your resume text below.',
     uploadLabel: 'Click to upload a file',
@@ -92,8 +122,8 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
     jobDescriptionPlaceholder: 'Paste the full job description here...',
     customSectionTitle: '3. Custom Instructions (Optional)',
     customSectionDescription: 'Guide the AI with specific requests for even better results.',
-  customPlaceholder: "e.g., 'Make the summary more concise.' or 'Emphasize my project management skills.'",
-  analyzeButton: 'Tailor my CV to this job',
+    customPlaceholder: "e.g., 'Make the summary more concise.' or 'Emphasize my project management skills.'",
+    analyzeButton: 'Analyze my CV against this job',
     contentLanguageLabel: 'Content language',
     resumeLanguageLabel: 'Resume language',
     jobDescriptionLanguageLabel: 'Job description language',
@@ -108,10 +138,10 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
     errorJobMissing: 'Please provide a job description.',
     errorInvalidFileType: 'Upload a PDF, DOCX, or TXT file.',
     errorFileTooLarge: 'File must be smaller than 5MB.',
-    queueTitle: 'Optimization Jobs',
+    queueTitle: 'Analysis Runs',
     queueProcessing: 'Processing',
     queueComplete: 'Complete',
-    resultsHeading: 'Optimization Results',
+    resultsHeading: 'Analysis Results',
     backToDashboard: '← Back to Dashboard',
     refineHeading: 'Refine Your Result',
     refineDescription: 'Not quite right? Enter instructions below to have the AI make further tweaks to your resume.',
@@ -123,39 +153,69 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
     changeLog: 'Change Log',
     optimizedPreview: 'Optimized Resume Preview',
     copyMarkdown: 'Copy Markdown',
-  copied: 'Copied!',
-  resultsGenerating: 'Your results are being generated...',
+    copied: 'Copied!',
+    resultsGenerating: 'Your analysis is running...',
     resultsGeneratingSub: 'This may take a moment.',
     instructionsError: 'Please provide refinement instructions.',
-    analysisShow: 'View detailed match analysis',
+    analysisShow: 'View detailed analysis',
     analysisHide: 'Hide detailed analysis',
+    structuredExtractionTitle: 'Structured extraction (LLM JSON)',
+    structuredExtractionSubtitle: 'Schema-constrained entities validated for reliability.',
+    groundedFeedbackTitle: 'Grounded match analysis',
+    matchedLabel: 'Matched',
+    missingLabel: 'Missing',
+    weakLabel: 'Weak',
+    evidenceLabel: 'Evidence',
+    retrievalContextTitle: 'Retrieval context (embeddings)',
+    reliabilityTitle: 'Reliability & performance',
+    invalidJsonRateLabel: 'Invalid JSON rate',
+    latencyLabel: 'Latest latency',
+    avgLatencyLabel: 'Avg latency (target ≤20s)',
+    lastRunValidLabel: 'Last run valid',
+    reliabilityTargets: 'Targets: invalid JSON ≤2%, response time ≤20s.',
+    evaluationTitle: 'Evaluation scores',
+    translationTitle: 'Localization & translation',
+    translationNotesLabel: 'Translation notes',
+    outputLanguageLabel: 'Output language',
+    detectedResumeLabel: 'Resume detected',
+    detectedJobLabel: 'Job detected',
+    skillsLabel: 'Skills',
+    toolsLabel: 'Tools',
+    educationLabel: 'Education',
+    experienceLabel: 'Experience',
+    extractionAccuracyLabel: 'Extraction accuracy',
+    matchingPrecisionLabel: 'Matching precision',
+    retrievalRelevanceLabel: 'Retrieval relevance',
+    feedbackQualityLabel: 'Feedback quality',
+    statusValid: 'Valid',
+    statusInvalid: 'Invalid',
     heroTitle: 'Own every interview—Arabic or English',
-    heroSubtitle: 'Generate ATS-friendly Arabic resumes and polished English versions from one workflow.',
+    heroSubtitle: 'Analyze ATS alignment for Arabic and English resumes in one workflow.',
     heroHighlights: [
-      'Surface Arabic-first sections while keeping English accomplishments aligned.',
-      'Preserves RTL layout conventions that pass corporate ATS filters.',
-      'Guides bilingual storytelling so global recruiters understand your regional impact.',
+      'Audit Arabic-first sections while keeping English accomplishments aligned.',
+      'Surface ATS risks and RTL layout issues before you apply.',
+      'Provide bilingual storytelling cues so recruiters see your regional impact.',
     ],
     languageHelperTitle: 'Language tip',
     languageHelperBody: 'Select the languages that reflect your source materials and the market you are targeting. We automatically adapt formatting for Arabic RTL sections and highlight English summaries when needed.',
-  refineQuickActionsTitle: 'Quick refinement suggestions',
-  refineQuickActionsDescription: 'Click a suggestion to append it to your instructions.',
-  refineQuickActions: [
+    refineQuickActionsTitle: 'Quick refinement suggestions',
+    refineQuickActionsDescription: 'Click a suggestion to append it to your instructions.',
+    refineQuickActions: [
       { id: 'moreFormal', label: 'More formal tone', instruction: 'Make the resume read with a more formal and polished tone.' },
       { id: 'shorter', label: 'Shorter', instruction: 'Tighten the summary and bullet points so the content is more concise.' },
       { id: 'moreTechnical', label: 'More technical', instruction: 'Add technical depth and highlight specific tools, frameworks, or metrics.' },
       { id: 'arabicFirst', label: 'Arabic-first CV', instruction: 'Prioritize Arabic headings and ensure the Arabic content appears first.' },
     ],
-  steps: {
+    steps: {
       input: { label: 'Step 1', title: 'Input Details' },
       processing: { label: 'Step 2', title: 'Processing' },
-      results: { label: 'Step 3', title: 'Optimization Results' },
+      results: { label: 'Step 3', title: 'Analysis Results' },
       refine: { label: 'Step 4', title: 'Refine with AI' },
     },
   },
   ar: {
-    navTitle: 'منسق السيرة الذاتية بالذكاء الاصطناعي',
-    navSubtitle: 'تحسينات ثنائية اللغة ومتوافقة مع أنظمة التتبع',
+    navTitle: 'محلل السيرة الذاتية بالذكاء الاصطناعي',
+    navSubtitle: 'تحليل ثنائي اللغة ومتوافق مع أنظمة التتبع',
     resumeSectionTitle: '١. سيرتك الذاتية',
     resumeSectionDescription: 'قم بتحميل ملف PDF/DOCX أو الصق نص سيرتك الذاتية بالأسفل.',
     uploadLabel: 'انقر لرفع ملف',
@@ -166,8 +226,8 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
     jobDescriptionPlaceholder: 'اكتب الوصف الوظيفي الكامل هنا...',
     customSectionTitle: '٣. تعليمات مخصصة (اختياري)',
     customSectionDescription: 'وجّه الذكاء الاصطناعي بطلبات محددة للحصول على نتائج أدق.',
-  customPlaceholder: "مثلاً: \"اجعل الملخص أكثر رسمية\" أو \"أبرز خبرتي في إدارة المشاريع\".",
-  analyzeButton: 'خصِّص سيرتي لهذه الوظيفة',
+    customPlaceholder: "مثلاً: \"اجعل الملخص أكثر رسمية\" أو \"أبرز خبرتي في إدارة المشاريع\".",
+    analyzeButton: 'حلّل سيرتي مقابل هذه الوظيفة',
     contentLanguageLabel: 'لغة المحتوى',
     resumeLanguageLabel: 'لغة السيرة الذاتية',
     jobDescriptionLanguageLabel: 'لغة الوصف الوظيفي',
@@ -182,10 +242,10 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
     errorJobMissing: 'يرجى إدخال الوصف الوظيفي.',
     errorInvalidFileType: 'يجب رفع ملف بصيغة PDF أو DOCX أو TXT.',
     errorFileTooLarge: 'يجب ألا يتجاوز حجم الملف ٥ ميجابايت.',
-    queueTitle: 'طلبات التحسين',
+    queueTitle: 'طلبات التحليل',
     queueProcessing: 'جارٍ المعالجة',
     queueComplete: 'مكتمل',
-    resultsHeading: 'نتائج التحسين',
+    resultsHeading: 'نتائج التحليل',
     backToDashboard: '↪ العودة إلى لوحة التحكم',
     refineHeading: 'حسّن النتيجة',
     refineDescription: 'لم تصل بعد إلى الشكل المثالي؟ أضف تعليمات وسينفّذها الذكاء الاصطناعي.',
@@ -197,33 +257,63 @@ const translations: Record<SupportedLanguage, TranslationStrings> = {
     changeLog: 'سجل التعديلات',
     optimizedPreview: 'معاينة السيرة المحسّنة',
     copyMarkdown: 'نسخ Markdown',
-  copied: 'تم النسخ!',
-  resultsGenerating: 'يتم الآن إنشاء النتائج...',
+    copied: 'تم النسخ!',
+    resultsGenerating: 'يتم الآن تشغيل التحليل...',
     resultsGeneratingSub: 'قد يستغرق ذلك لحظات.',
     instructionsError: 'يرجى إدخال تعليمات التحسين.',
     analysisShow: 'عرض تحليل التوافق التفصيلي',
     analysisHide: 'إخفاء التحليل التفصيلي',
+    structuredExtractionTitle: 'استخراج منظم (JSON مقيد المخطط)',
+    structuredExtractionSubtitle: 'كيانات مستخرجة من خلال LLM مع تحقق للبنية.',
+    groundedFeedbackTitle: 'تحليل توافق مستند إلى أدلة',
+    matchedLabel: 'متوافق',
+    missingLabel: 'ناقص',
+    weakLabel: 'ضعيف',
+    evidenceLabel: 'الأدلة',
+    retrievalContextTitle: 'سياق الاسترجاع (التضمين)',
+    reliabilityTitle: 'الموثوقية والأداء',
+    invalidJsonRateLabel: 'معدل JSON غير صالح',
+    latencyLabel: 'الزمن المستغرق الأخير',
+    avgLatencyLabel: 'متوسط الزمن (الهدف ≤ ٢٠ ثانية)',
+    lastRunValidLabel: 'آخر تشغيل صالح',
+    reliabilityTargets: 'الأهداف: JSON غير صالح ≤٢٪، زمن استجابة ≤٢٠ ثانية.',
+    evaluationTitle: 'درجات التقييم',
+    translationTitle: 'التعريب والترجمة',
+    translationNotesLabel: 'ملاحظات الترجمة',
+    outputLanguageLabel: 'لغة الإخراج',
+    detectedResumeLabel: 'لغة السيرة المكتشفة',
+    detectedJobLabel: 'لغة الوصف المكتشفة',
+    skillsLabel: 'المهارات',
+    toolsLabel: 'الأدوات',
+    educationLabel: 'التعليم',
+    experienceLabel: 'الخبرات',
+    extractionAccuracyLabel: 'دقة الاستخراج',
+    matchingPrecisionLabel: 'دقة المطابقة',
+    retrievalRelevanceLabel: 'ملاءمة الاسترجاع',
+    feedbackQualityLabel: 'جودة التغذية الراجعة',
+    statusValid: 'صالح',
+    statusInvalid: 'غير صالح',
     heroTitle: 'تميّز في أسواق العمل العربية والإنجليزية',
-    heroSubtitle: 'أنشئ سير ذاتية عربية متوافقة مع أنظمة التتبع ونسخًا إنجليزية مصقولة من مكان واحد.',
+    heroSubtitle: 'حلّل توافق سيرتك مع الوظائف بالعربية والإنجليزية من مكان واحد.',
     heroHighlights: [
-      'أبرز الأقسام العربية أولاً مع الحفاظ على إنجازاتك الإنجليزية في السياق الصحيح.',
-      'يحافظ على قواعد الكتابة من اليمين لليسار بطريقة تقرؤها أنظمة التتبع المؤسسية.',
-      'يركّز على سرد ثنائي اللغة يشرح تأثيرك المحلي للمُجنّدين الدوليين.',
+      'راجع الأقسام العربية أولاً مع إبقاء الإنجازات الإنجليزية في سياقها.',
+      'اكشف مخاطر ATS والتنسيق من اليمين لليسار قبل التقديم.',
+      'احصل على إرشادات لسرد ثنائي اللغة يوضح تأثيرك المحلي للمجندين الدوليين.',
     ],
     languageHelperTitle: 'ملاحظة حول اللغة',
     languageHelperBody: 'اختر اللغات التي تعكس سيرتك الأصلية والسوق المستهدف. سنضبط الاتجاه تلقائيًا للنصوص العربية ونُبرز الملخصات الإنجليزية عند الحاجة.',
-  refineQuickActionsTitle: 'اقتراحات سريعة',
-  refineQuickActionsDescription: 'انقر على أي اقتراح لإضافته إلى التعليمات.',
-  refineQuickActions: [
+    refineQuickActionsTitle: 'اقتراحات سريعة',
+    refineQuickActionsDescription: 'انقر على أي اقتراح لإضافته إلى التعليمات.',
+    refineQuickActions: [
       { id: 'moreFormal', label: 'صيغة أكثر رسمية', instruction: 'اجعل النبرة أكثر رسمية ومهنية في جميع الأقسام.' },
       { id: 'shorter', label: 'اختصر المحتوى', instruction: 'قلّل طول الملخص والنقاط مع الحفاظ على أهم النتائج.' },
       { id: 'moreTechnical', label: 'تفاصيل تقنية أكثر', instruction: 'أضف تفاصيل تقنية إضافية واذكر الأدوات والأطر المرتبطة بالدور.' },
       { id: 'arabicFirst', label: 'سيرة عربية أولاً', instruction: 'قدّم المحتوى العربي أولاً وتأكد من أن العناوين الأساسية باللغة العربية.' },
     ],
-  steps: {
+    steps: {
       input: { label: 'الخطوة ١', title: 'إدخال البيانات' },
       processing: { label: 'الخطوة ٢', title: 'جاري المعالجة' },
-      results: { label: 'الخطوة ٣', title: 'نتائج التحسين' },
+      results: { label: 'الخطوة ٣', title: 'نتائج التحليل' },
       refine: { label: 'الخطوة ٤', title: 'تحسين باستخدام الذكاء الاصطناعي' },
     },
   },

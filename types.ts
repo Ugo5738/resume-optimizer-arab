@@ -22,6 +22,46 @@ export interface OptimizationResult {
   previewMarkdown: string;
   detectedResumeLang?: LanguageCode;
   detectedJobDescLang?: LanguageCode;
+  extractedEntities?: {
+    skills: string[];
+    tools: string[];
+    education: string[];
+    experience: {
+      role: string;
+      company?: string;
+      duration?: string;
+      highlights?: string[];
+    }[];
+  };
+  alignmentInsights?: {
+    matched: string[];
+    missing: string[];
+    weak: string[];
+    evidence?: {
+      source: 'resume' | 'job' | 'retrieval';
+      snippet: string;
+      score?: number;
+      note?: string;
+    }[];
+  };
+  reliability?: {
+    invalidJsonRatePct?: number;
+    lastRunValid?: boolean;
+    latencySeconds?: number;
+    avgLatencySeconds?: number;
+  };
+  evaluation?: {
+    extractionAccuracy?: number;
+    matchingPrecision?: number;
+    retrievalRelevance?: number;
+    feedbackQuality?: number;
+  };
+  retrievalContexts?: {
+    snippet: string;
+    source: 'resume' | 'job' | 'retrieval';
+    score?: number;
+  }[];
+  translationNotes?: string[];
 }
 
 export interface JobRecord {

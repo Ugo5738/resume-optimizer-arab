@@ -31,12 +31,118 @@ const mockCompleteJobResult: OptimizationResult = {
         'Added a dedicated technical skills section for better keyword matching.',
         'Rephrased responsibilities to use more active, impactful language.'
     ],
+    detectedResumeLang: 'en',
+    detectedJobDescLang: 'en',
+    extractedEntities: {
+        skills: ['Frontend Architecture', 'Design Systems', 'Team Leadership', 'Performance Optimization'],
+        tools: ['React', 'TypeScript', 'Storybook', 'Figma', 'Node.js', 'CI/CD', 'JIRA'],
+        education: ['B.Sc. Computer Science — King Saud University (2015)'],
+        experience: [
+            {
+                role: 'Lead Frontend Engineer',
+                company: 'TechSolutions Inc.',
+                duration: '2020–Present',
+                highlights: [
+                    'Architected a component-based design system adopted across 5 teams.',
+                    'Mentored 4 junior developers and instituted code review standards.',
+                    'Reduced initial page load time by 300ms through bundle trimming.'
+                ]
+            },
+            {
+                role: 'Senior Frontend Engineer',
+                company: 'CreativeMinds',
+                duration: '2017–2020',
+                highlights: [
+                    'Delivered UI modernization that increased conversion by 12%.',
+                    'Introduced Storybook-driven development to improve design fidelity.'
+                ]
+            }
+        ],
+    },
+    alignmentInsights: {
+        matched: ['React', 'TypeScript', 'UI/UX Design', 'Design Systems'],
+        missing: ['AWS', 'Observability tooling', 'Accessibility testing'],
+        weak: ['CI/CD depth', 'Product metrics storytelling'],
+        evidence: [
+            {
+                source: 'resume',
+                snippet: 'Led the architecture and development of a new component-based design system in React and Storybook.',
+                score: 0.82,
+            },
+            {
+                source: 'job',
+                snippet: 'Role requires driving CI/CD maturity and observability coverage.',
+                score: 0.74,
+                note: 'Add examples of deployment pipelines and monitoring.'
+            },
+            {
+                source: 'retrieval',
+                snippet: 'Experience with agile teams delivering UI/UX features with measurable impact.',
+                score: 0.78,
+            },
+        ],
+    },
+    reliability: {
+        invalidJsonRatePct: 1.2,
+        lastRunValid: true,
+        latencySeconds: 14,
+        avgLatencySeconds: 12,
+    },
+    evaluation: {
+        extractionAccuracy: 92,
+        matchingPrecision: 88,
+        retrievalRelevance: 90,
+        feedbackQuality: 86,
+    },
+    retrievalContexts: [
+        {
+            source: 'resume',
+            snippet: 'Component-based design system in React and Storybook improved developer efficiency by 40%.',
+            score: 0.83,
+        },
+        {
+            source: 'job',
+            snippet: 'Looking for leaders who can mentor teams and drive UI/UX best practices with metrics.',
+            score: 0.8,
+        },
+        {
+            source: 'retrieval',
+            snippet: 'CI/CD ownership and observability are required to stabilize releases.',
+            score: 0.76,
+        },
+    ],
+    translationNotes: [
+        'Localized summary into Arabic while preserving English keywords for ATS parsing.',
+        'Applied RTL-safe spacing for Arabic headings and ensured bilingual section ordering.',
+    ],
     previewMarkdown: `# Your Name\n\n## Summary\n\nResults-driven Senior Frontend Engineer with over 8 years of experience building and scaling responsive web applications. Expert in React, TypeScript, and modern UI/UX principles, with a proven track record of leading teams to deliver high-quality software.\n\n## Experience\n\n**Lead Frontend Engineer** @ TechSolutions Inc. (2020-Present)\n\n*   Led the architecture and development of a new component-based design system in React and Storybook, improving developer efficiency by 40%.\n*   Mentored a team of 4 junior developers, resulting in a 25% increase in team velocity and a 50% reduction in bug reports.\n*   Engineered a performant state management solution using Redux Toolkit, decreasing initial page load time by 300ms.\n\n## Skills\n\n*   **Languages:** TypeScript, JavaScript (ESNext), HTML5, CSS3/SASS\n*   **Frameworks:** React, Next.js, Vue.js\n*   **Tools & Platforms:** Webpack, Vite, Docker, Git, Figma, JIRA`
 };
 
 const mockJobsInQueue: JobQueueItem[] = [
-    { id: 'job_1', title: 'Senior Frontend Developer @ TechCorp...', status: 'complete', result: mockCompleteJobResult },
-    { id: 'job_2', title: 'UI/UX Engineer @ CreativeMinds...', status: 'processing', result: null },
+    {
+        id: 'job_1',
+        title: 'Senior Frontend Developer @ TechCorp...',
+        status: 'complete',
+        result: mockCompleteJobResult,
+        metadata: {
+            company: 'TechCorp',
+            resumeLang: 'en',
+            jobDescriptionLang: 'en',
+            desiredOutputLang: 'ar',
+        },
+    },
+    {
+        id: 'job_2',
+        title: 'UI/UX Engineer @ CreativeMinds...',
+        status: 'processing',
+        result: null,
+        metadata: {
+            company: 'CreativeMinds',
+            resumeLang: 'en',
+            jobDescriptionLang: 'en',
+            desiredOutputLang: 'en',
+        },
+    },
 ];
 
 const JOB_POLL_INTERVAL = 2500;
@@ -59,11 +165,11 @@ const cloneQueueItem = (job: JobQueueItem): JobQueueItem => ({
     ...job,
     result: job.result
         ? {
-              ...job.result,
-              changeLog: [...job.result.changeLog],
-              coveredKeywords: [...job.result.coveredKeywords],
-              missingKeywords: [...job.result.missingKeywords],
-          }
+            ...job.result,
+            changeLog: [...job.result.changeLog],
+            coveredKeywords: [...job.result.coveredKeywords],
+            missingKeywords: [...job.result.missingKeywords],
+        }
         : null,
     metadata: job.metadata ? { ...job.metadata } : undefined,
 });
@@ -77,7 +183,7 @@ const deriveJobTitle = (jobTitle: string, jobDescription: string) => {
         .map(line => line.trim())
         .find(Boolean);
     if (!fallback) {
-        return 'Optimization Job';
+        return 'Analysis Job';
     }
     return fallback.length > 80 ? `${fallback.slice(0, 80)}…` : fallback;
 };
@@ -92,7 +198,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
     const [toast, setToast] = useState<ToastMessage | null>(null);
     const [appView, setAppView] = useState<'dashboard' | 'queue' | 'results'>('dashboard');
     const isDemoMode = useMemo(() => import.meta.env.VITE_DEMO_MODE === 'true', []);
-    
+
     // State for developer preview (demo mode only)
     const [previewState, setPreviewState] = useState<'dashboard' | 'queue' | 'results'>('dashboard');
     const pollTimeouts = useRef<Record<string, number>>({});
@@ -105,7 +211,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
     useEffect(() => {
         return () => {
             Object.values(pollTimeouts.current).forEach(timeoutId => {
-                clearTimeout(timeoutId);
+                clearTimeout(timeoutId as number);
             });
         };
     }, []);
@@ -172,7 +278,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
 
         runPoll().then(shouldContinue => {
             if (shouldContinue && attempt < JOB_POLL_MAX_ATTEMPTS) {
-                const timeoutId = setTimeout(() => {
+                const timeoutId = window.setTimeout(() => {
                     pollJobStatus(jobId, successMessage, attempt + 1);
                 }, JOB_POLL_INTERVAL);
                 pollTimeouts.current[jobId] = timeoutId;
@@ -243,7 +349,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
             );
             setJobsQueue(prev => prev.filter(queueJob => queueJob.id !== optimisticId));
             syncJobToQueue(job, { prepend: true });
-            pollJobStatus(job.id, 'Optimization complete!');
+            pollJobStatus(job.id, 'Analysis complete!');
         } catch (error) {
             console.error(error);
             setJobsQueue(prev => prev.filter(queueJob => queueJob.id !== optimisticId));
@@ -278,7 +384,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
             showToast('An error occurred during refinement.', 'error');
         }
     };
-    
+
     const DevPreviewControls = () => {
         if (!isDemoMode) return null;
         return (
@@ -293,7 +399,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
             </div>
         );
     };
-    
+
     const renderContent = () => {
         if (isDemoMode && previewState !== 'dashboard') {
             if (previewState === 'results') {
@@ -318,9 +424,9 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
             return (
                 <div className="flex flex-col max-w-4xl mx-auto space-y-6">
                     <div className="p-4 sm:p-6 bg-gray-800 rounded-2xl shadow-lg border border-gray-700">
-                        <p className="text-base font-medium text-slate-100">Your optimization is processing</p>
+                        <p className="text-base font-medium text-slate-100">Your analysis is processing</p>
                         <p className="text-sm text-slate-400 mt-1">
-                            We’re tailoring your resume to match the job description. You can follow the status below and open the result once it’s ready.
+                            We’re analyzing your resume against the job description. You can follow the status below and open the insights once they’re ready.
                         </p>
                     </div>
                     <JobsQueue jobs={jobsQueue} onSelectJob={handleJobSelect} />
@@ -336,8 +442,8 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
                 <div className="order-1 lg:order-2">
                     <div className="sticky top-8">
                         <div className="mb-4 p-4 bg-gray-800 border border-gray-700 rounded-xl">
-                            <p className="text-sm text-slate-300">Recent optimizations</p>
-                            <p className="text-xs text-slate-400">Completed jobs appear here so you can quickly reopen results.</p>
+                            <p className="text-sm text-slate-300">Recent analyses</p>
+                            <p className="text-xs text-slate-400">Completed runs appear here so you can quickly reopen results.</p>
                         </div>
                         <JobsQueue jobs={jobsQueue} onSelectJob={handleJobSelect} />
                     </div>
@@ -367,12 +473,12 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
 
     if (selectedJob) {
         return (
-             <div className={containerClasses} dir={direction}>
+            <div className={containerClasses} dir={direction}>
                 <Navbar userEmail={session.user.email} />
                 {toast && <Toast toast={toast} onClose={() => setToast(null)} />}
                 <main className="p-4 mx-auto max-w-7xl sm:p-6 lg:p-8">
-                     <StepIndicator current={currentStep} />
-                     <ResultsView
+                    <StepIndicator current={currentStep} />
+                    <ResultsView
                         job={selectedJob}
                         onBack={() => { setSelectedJobId(null); setAppView('dashboard'); }}
                         onRefine={handleRefine}
