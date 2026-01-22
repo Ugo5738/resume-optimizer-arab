@@ -201,6 +201,7 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
 
     // State for developer preview (demo mode only)
     const [previewState, setPreviewState] = useState<'dashboard' | 'queue' | 'results'>('dashboard');
+    const [previewEnabled, setPreviewEnabled] = useState<boolean>(isDemoMode);
     const pollTimeouts = useRef<Record<string, number>>({});
 
 
@@ -385,23 +386,43 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
         }
     };
 
-    const DevPreviewControls = () => {
-        if (!isDemoMode) return null;
-        return (
-            <div className="p-4 mb-8 border border-dashed rounded-lg bg-yellow-900/20 border-yellow-500/30">
-                <h3 className="font-semibold text-yellow-300">Developer Preview Controls</h3>
-                <p className="text-sm text-yellow-400/80">Use these buttons to navigate between different UI states for screenshots.</p>
-                <div className="flex flex-wrap gap-2 mt-3">
-                    <button onClick={() => setPreviewState('dashboard')} className="px-3 py-1 text-sm text-white bg-gray-700 rounded-md hover:bg-gray-600">Dashboard</button>
-                    <button onClick={() => setPreviewState('queue')} className="px-3 py-1 text-sm text-white bg-gray-700 rounded-md hover:bg-gray-600">Queue (Processing)</button>
-                    <button onClick={() => setPreviewState('results')} className="px-3 py-1 text-sm text-white bg-gray-700 rounded-md hover:bg-gray-600">Results Page</button>
-                </div>
+    const DevPreviewControls = () => (
+        <div className="p-4 mb-8 border border-dashed rounded-lg bg-yellow-900/20 border-yellow-500/30">
+            <h3 className="font-semibold text-yellow-300">Developer Preview Controls</h3>
+            <p className="text-sm text-yellow-400/80">
+                Toggle preview states for screenshots. In production, these use mock data.
+            </p>
+            <div className="flex flex-wrap gap-2 mt-3">
+                <button
+                    onClick={() => { setPreviewEnabled(true); setPreviewState('dashboard'); }}
+                    className="px-3 py-1 text-sm text-white bg-gray-700 rounded-md hover:bg-gray-600"
+                >
+                    Dashboard
+                </button>
+                <button
+                    onClick={() => { setPreviewEnabled(true); setPreviewState('queue'); }}
+                    className="px-3 py-1 text-sm text-white bg-gray-700 rounded-md hover:bg-gray-600"
+                >
+                    Queue (Processing)
+                </button>
+                <button
+                    onClick={() => { setPreviewEnabled(true); setPreviewState('results'); }}
+                    className="px-3 py-1 text-sm text-white bg-gray-700 rounded-md hover:bg-gray-600"
+                >
+                    Results Page
+                </button>
+                <button
+                    onClick={() => { setPreviewEnabled(false); setPreviewState('dashboard'); }}
+                    className="px-3 py-1 text-sm text-white bg-gray-700 rounded-md hover:bg-gray-600"
+                >
+                    Live Data
+                </button>
             </div>
-        );
-    };
+        </div>
+    );
 
     const renderContent = () => {
-        if (isDemoMode && previewState !== 'dashboard') {
+        if (previewEnabled && previewState !== 'dashboard') {
             if (previewState === 'results') {
                 return (
                     <ResultsView
