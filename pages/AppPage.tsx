@@ -411,12 +411,6 @@ const AppPage: React.FC<{ session: Session }> = ({ session }) => {
                 >
                     Results Page
                 </button>
-                <button
-                    onClick={() => { setPreviewEnabled(false); setPreviewState('dashboard'); }}
-                    className="px-3 py-1 text-sm text-white bg-gray-700 rounded-md hover:bg-gray-600"
-                >
-                    Live Data
-                </button>
             </div>
         </div>
     );

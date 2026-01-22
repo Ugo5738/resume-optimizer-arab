@@ -12,6 +12,8 @@ const ResultsView: React.FC<{
     onBack: () => void;
     onRefine: (jobId: string, instructions: string) => Promise<void>;
 }> = ({ job, onBack, onRefine }) => {
+    // Toggle this flag to re-enable the Refine with AI card; kept for easy restoration.
+    const showRefineCard = false;
     const { language } = useLanguage();
     const t = useTranslations();
     const isRTL = language === 'ar';
@@ -19,6 +21,8 @@ const ResultsView: React.FC<{
     const [isRefining, setIsRefining] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [showAnalysis, setShowAnalysis] = useState(false);
+    const gridColumns = showRefineCard ? 'md:grid-cols-5' : 'md:grid-cols-1';
+    const resultsColSpan = showRefineCard ? 'md:col-span-3' : 'md:col-span-1';
 
     const handleQuickActionSelect = (instruction: string) => {
         setRefineInstructions(prev => {
@@ -53,58 +57,60 @@ const ResultsView: React.FC<{
                 </Button>
             </div>
 
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-5 md:items-start">
-                {/* Left Panel - Refine */}
-                <Card className="sticky md:col-span-2 top-8">
-                    <form onSubmit={handleRefineSubmit} className="space-y-4">
-                        <div className="space-y-1">
-                            <p className="text-xs uppercase tracking-wide text-slate-400">{t.steps.refine.label}</p>
-                            <h2 className="text-lg font-semibold text-slate-100">{t.steps.refine.title}</h2>
-                        </div>
-                        <p className="text-sm text-slate-400">
-                            {t.refineDescription}
-                        </p>
-                        {t.refineQuickActions.length > 0 && (
-                            <div className="space-y-2">
-                                <div>
-                                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-300">{t.refineQuickActionsTitle}</p>
-                                    <p className="text-xs text-slate-400">{t.refineQuickActionsDescription}</p>
-                                </div>
-                                <div className={`flex flex-wrap gap-2 ${isRTL ? 'justify-end' : ''}`}>
-                                    {t.refineQuickActions.map(action => (
-                                        <button
-                                            key={action.id}
-                                            type="button"
-                                            className="px-3 py-1.5 text-xs font-medium rounded-full border border-gray-600 text-slate-200 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
-                                            onClick={() => handleQuickActionSelect(action.instruction)}
-                                        >
-                                            {action.label}
-                                        </button>
-                                    ))}
-                                </div>
+            <div className={`grid grid-cols-1 gap-8 ${gridColumns} md:items-start`}>
+                {/* Left Panel - Refine (commented out for now; set showRefineCard=true to restore) */}
+                {showRefineCard && (
+                    <Card className="sticky md:col-span-2 top-8">
+                        <form onSubmit={handleRefineSubmit} className="space-y-4">
+                            <div className="space-y-1">
+                                <p className="text-xs uppercase tracking-wide text-slate-400">{t.steps.refine.label}</p>
+                                <h2 className="text-lg font-semibold text-slate-100">{t.steps.refine.title}</h2>
                             </div>
-                        )}
-                        <textarea
-                            value={refineInstructions}
-                            onChange={e => { setRefineInstructions(e.target.value); setError(null); }}
-                            rows={5}
-                            placeholder={t.refinePlaceholder}
-                            className="block w-full text-sm bg-gray-700 text-slate-200 border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 placeholder:text-gray-400"
-                            required
-                        />
-                         {error && <p className="text-sm text-red-400">{error}</p>}
-                        <Button
-                            type="submit"
-                            isLoading={isRefining || job.status === 'processing' || job.status === 'queued'}
-                            className="w-full"
-                        >
-                           {(job.status === 'processing' || job.status === 'queued') ? t.refiningButton : t.refineButton}
-                        </Button>
-                    </form>
-                </Card>
+                            <p className="text-sm text-slate-400">
+                                {t.refineDescription}
+                            </p>
+                            {t.refineQuickActions.length > 0 && (
+                                <div className="space-y-2">
+                                    <div>
+                                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-300">{t.refineQuickActionsTitle}</p>
+                                        <p className="text-xs text-slate-400">{t.refineQuickActionsDescription}</p>
+                                    </div>
+                                    <div className={`flex flex-wrap gap-2 ${isRTL ? 'justify-end' : ''}`}>
+                                        {t.refineQuickActions.map(action => (
+                                            <button
+                                                key={action.id}
+                                                type="button"
+                                                className="px-3 py-1.5 text-xs font-medium rounded-full border border-gray-600 text-slate-200 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition"
+                                                onClick={() => handleQuickActionSelect(action.instruction)}
+                                            >
+                                                {action.label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            <textarea
+                                value={refineInstructions}
+                                onChange={e => { setRefineInstructions(e.target.value); setError(null); }}
+                                rows={5}
+                                placeholder={t.refinePlaceholder}
+                                className="block w-full text-sm bg-gray-700 text-slate-200 border-gray-600 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 placeholder:text-gray-400"
+                                required
+                            />
+                            {error && <p className="text-sm text-red-400">{error}</p>}
+                            <Button
+                                type="submit"
+                                isLoading={isRefining || job.status === 'processing' || job.status === 'queued'}
+                                className="w-full"
+                            >
+                                {(job.status === 'processing' || job.status === 'queued') ? t.refiningButton : t.refineButton}
+                            </Button>
+                        </form>
+                    </Card>
+                )}
 
                 {/* Right Panel - Results Document */}
-                <div className="md:col-span-3 p-8 bg-white rounded-lg shadow-lg">
+                <div className={`${resultsColSpan} p-8 bg-white rounded-lg shadow-lg`}>
                     {job.result ? (
                         <div className="space-y-6">
                             <div className={`flex items-center justify-between ${isRTL ? 'flex-row-reverse' : ''}`}>
